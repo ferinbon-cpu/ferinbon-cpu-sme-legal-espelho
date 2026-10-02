@@ -1,0 +1,78 @@
+name: SME Legal Pending Recovery Probe
+
+on:
+  push:
+    paths:
+      - 'requests/recovery.tsv'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Probe and download official candidates
+        shell: bash
+        run: |
+          set -uo pipefail
+          test -f requests/recovery.tsv
+          mkdir -p out
+          : > out/metadata.tsv
+          : > out/errors.tsv
+          while IFS=$'\t' read -r CASE_ID DOC_ID URL FILENAME SOURCE_CLASS; do
+            [ -z "${CASE_ID:-}" ] && continue
+            [ "$CASE_ID" = "case_id" ] && continue
+            [[ "$CASE_ID" =~ ^# ]] && continue
+            if [ -z "$DOC_ID" ] || [ -z "$URL" ] || [ -z "$FILENAME" ]; then
+              printf '%s\t%s\t%s\t%s\tINVALID_REQUEST\n' "$CASE_ID" "$DOC_ID" "$URL" "$FILENAME" >> out/errors.tsv
+              continue
+            fi
+            mkdir -p "out/$CASE_ID"
+            TARGET="out/$CASE_ID/$FILENAME"
+            echo "Downloading $CASE_ID ($DOC_ID) -> $FILENAME"
+            if curl --location --fail --retry 3 --retry-delay 2 --connect-timeout 30 --max-time 600                  --user-agent 'Mozilla/5.0 SME-Legal-Archive/1.0' --output "$TARGET" "$URL"; then
+              SIZE=$(stat -c %s "$TARGET")
+              SHA256=$(sha256sum "$TARGET" | awk '{print $1}')
+              MIME=$(file --brief --mime-type "$TARGET")
+              printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n'                 "$CASE_ID" "$DOC_ID" "$URL" "$FILENAME" "$SOURCE_CLASS" "$SIZE" "$SHA256" "$MIME" >> out/metadata.tsv
+            else
+              rm -f "$TARGET"
+              printf '%s\t%s\t%s\t%s\tDOWNLOAD_FAILED\n' "$CASE_ID" "$DOC_ID" "$URL" "$FILENAME" >> out/errors.tsv
+            fi
+          done < requests/recovery.tsv
+          echo "--- metadata.tsv ---"
+          cat out/metadata.tsv
+          echo "--- errors.tsv ---"
+          cat out/errors.tsv
+
+      - name: Upload recovery artifact
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: sme-legal-pending-recovery
+          path: out/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 1
+
+      - name: Publish recovery metadata
+        if: always()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+          ARTIFACT_ID: ${{ steps.upload.outputs.artifact-id }}
+          COMMIT_SHA: ${{ github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'run_id\t%s\nrun_attempt\t%s\nartifact_id\t%s\ncommit_sha\t%s\n'             "$RUN_ID" "$RUN_ATTEMPT" "${ARTIFACT_ID:-}" "$COMMIT_SHA" > latest-recovery.tsv
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add latest-recovery.tsv
+          git commit -m "ci: publish latest SME Legal recovery metadata" || exit 0
+          git push
