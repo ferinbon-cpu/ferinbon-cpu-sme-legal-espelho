@@ -1,2 +1,4 @@
 case_id	doc_id	url	filename	source_class
-DOC-0030-RESO2012-ZIP	DOC-0030	https://sme.limeira.sp.gov.br/leis/Reso_2012.zip	Reso_2012.zip	OFFICIAL_ARCHIVE
+UPDATE-2026-LC1027-PLC	UPDATE-2026-LC1027	https://consulta.limeira.sp.leg.br/arquivo?Id=589127	PLC_21_2026_arquivo_camara.pdf	OFFICIAL_CHAMBER
+UPDATE-2026-LC1027-JOM-PAGE	UPDATE-2026-LC1027	https://www.limeira.sp.gov.br/jornaloficial/?dataDiario=5%2F9%2F2026	jornaloficial_2026-09-05.html	DISCOVERY
+UPDATE-2026-LC1027-LEGIS	UPDATE-2026-LC1027	https://legislacao.limeira.sp.leg.br/Limeira-SP/LeisComplementares/1027-2026/m3	lei_complementar_1027_2026_legislacao.html	DISCOVERY
