@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   download:
@@ -51,6 +51,7 @@ jobs:
           cat out/errors.tsv
 
       - name: Upload temporary artifact
+        id: upload
         uses: actions/upload-artifact@v4
         with:
           name: sme-legal-batch
@@ -58,3 +59,21 @@ jobs:
           if-no-files-found: error
           compression-level: 0
           retention-days: 1
+
+      - name: Publish run metadata
+        if: always()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+          ARTIFACT_ID: ${{ steps.upload.outputs.artifact-id }}
+          COMMIT_SHA: ${{ github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'run_id\t%s\nrun_attempt\t%s\nartifact_id\t%s\ncommit_sha\t%s\n' \
+            "$RUN_ID" "$RUN_ATTEMPT" "${ARTIFACT_ID:-}" "$COMMIT_SHA" > latest-run.tsv
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add latest-run.tsv
+          git commit -m "ci: publish latest SME Legal batch run metadata" || exit 0
+          git push
