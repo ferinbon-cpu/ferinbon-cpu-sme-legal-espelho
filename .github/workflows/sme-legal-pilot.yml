@@ -1,0 +1,44 @@
+name: SME Legal Pilot Download
+
+on:
+  push:
+    paths:
+      - 'requests/pilot.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download original bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          IFS=$'\t' read -r DOC_ID URL FILENAME < requests/pilot.txt
+          test -n "$DOC_ID"
+          test -n "$URL"
+          test -n "$FILENAME"
+          mkdir -p out
+          curl --location --fail --retry 3 --retry-delay 2 --connect-timeout 30 --max-time 300 \
+            --output "out/$FILENAME" "$URL"
+          SIZE=$(stat -c %s "out/$FILENAME")
+          SHA256=$(sha256sum "out/$FILENAME" | awk '{print $1}')
+          MIME=$(file --brief --mime-type "out/$FILENAME")
+          printf 'doc_id=%s\nurl=%s\nfilename=%s\nsize_bytes=%s\nsha256=%s\nmime=%s\n' \
+            "$DOC_ID" "$URL" "$FILENAME" "$SIZE" "$SHA256" "$MIME" > out/metadata.txt
+          cat out/metadata.txt
+
+      - name: Upload temporary artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sme-legal-pilot
+          path: out/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 1
