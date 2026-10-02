@@ -19,182 +19,182 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          curl -L --fail             -H "Authorization: Bearer $GH_TOKEN"             -H "X-GitHub-Api-Version: 2022-11-28"             "https://api.github.com/repos/${{ github.repository }}/actions/artifacts/11246497515/zip"             -o previous.zip
+          curl -L --fail             -H "Authorization: Bearer $GH_TOKEN"             -H "X-GitHub-Api-Version: 2022-11-28"             "https://api.github.com/repos/${{ github.repository }}/actions/artifacts/11247487242/zip"             -o previous.zip
           mkdir previous
           unzip -q previous.zip -d previous
 
-      - name: Upload DOC-0092 raw
+      - name: Upload DOC-0117 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0092/diretor-substituto-comissao.jpg
+          path: previous/DOC-0117/acolhimento_autista_mariana_-calsa.pdf
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0093 raw
+      - name: Upload DOC-0118 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0093/estatuto-da-apm_2022.pdf
+          path: previous/DOC-0118/ame-tea_decreto.pdf
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0094 raw
+      - name: Upload DOC-0119 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0094/lei-municipal-n-6697-2022-1.pdf
+          path: previous/DOC-0119/ame-tea_resolucao.pdf
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0095 raw
+      - name: Upload DOC-0120 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0095/medicamentos_ministrados_escolas.pdf
+          path: previous/DOC-0120/apm-e-atividades-escolares.pdf
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0096 raw
+      - name: Upload DOC-0121 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0096/resolucao_05_22_proibicao_de_cobranca_pecuniaria_em_eventos.pdf
+          path: previous/DOC-0121/assistentes-sociais-e-psicologos-na-educacao.pdf
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0097 raw
+      - name: Upload DOC-0122 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0097/gestaolegal-1_apresentacao1.docx
+          path: previous/DOC-0122/atividade-pedagogica-externa.pdf
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0098 raw
+      - name: Upload DOC-0123 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0098/assistente-adm..docx
+          path: previous/DOC-0123/banheiro-unissex.pdf
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0099 raw
+      - name: Upload DOC-0124 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0099/auxiliar-geral.docx
+          path: previous/DOC-0124/educacao-em-direitos-ambientais.pdf
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0100 raw
+      - name: Upload DOC-0125 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0100/merendeiro.docx
+          path: previous/DOC-0125/escola-bilingue_resolucao.pdf
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0101 raw
+      - name: Upload DOC-0126 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0101/monitor.docx
+          path: previous/DOC-0126/escola-bilingue.pdf
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0102 raw
+      - name: Upload DOC-0127 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0102/secretario-escola.docx
+          path: previous/DOC-0127/indicacao-01-2023-atualizacao-da-resolucao-9-2020.pdf
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0103 raw
+      - name: Upload DOC-0128 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0103/termo-de-recebimento-de-professor-ingressante-rh-lilian.doc
+          path: previous/DOC-0128/lei-de-protecao-de-dados.pdf
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0104 raw
+      - name: Upload DOC-0129 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0104/decreto-367-2021-zeladoria.pdf
+          path: previous/DOC-0129/mocao-de-apelo-cme-concurso-2014.pdf
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0105 raw
+      - name: Upload DOC-0130 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0105/lei-6653_21.pdf
+          path: previous/DOC-0130/mocao-de-apoio-01-2023-valorizacao-da-euqipe-gestora.pdf
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0106 raw
+      - name: Upload DOC-0131 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0106/resolucao-cme-sme-01_2021.pdf
+          path: previous/DOC-0131/nota-de-repudio-descumprimento-25-11-02-2022.pdf
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0107 raw
+      - name: Upload DOC-0132 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0107/01.-parecer-cme-01-2022-reprovacao-de-contas-de-2021.pdf
+          path: previous/DOC-0132/parecer-cme-01-2023-aplicacao-dos-recursos-de-2022.pdf
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0108 raw
+      - name: Upload DOC-0133 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0108/01.-parecer-cme-02-2021-continuum-pedagog.pdf
+          path: previous/DOC-0133/politica-transparencia-fundeb.pdf
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0109 raw
+      - name: Upload DOC-0134 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0109/02.-nota-de-repudio-conjunta-destinacao-de-recursos-a-sancetur.pdf
+          path: previous/DOC-0134/processo-seletivo-diretor-substituto.pdf
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0110 raw
+      - name: Upload DOC-0135 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0110/02.-parecer-cme-02-2022-readequacao-calendario-escolar-2022.pdf
+          path: previous/DOC-0135/registro-ponto-eletronico.pdf
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0111 raw
+      - name: Upload DOC-0136 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0111/03.-parecer-cme-03-2022-ampliacao-de-salas-de-aula.pdf
+          path: previous/DOC-0136/parecer-cme-02-2023.pdf
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0112 raw
+      - name: Upload DOC-0137 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0112/03.-resolucao-sme-cme-02-2021-diretrizes-eja.pdf
+          path: previous/DOC-0137/eixo_14_patrimoninovo.docx
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0113 raw
+      - name: Upload DOC-0138 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0113/04.-indicacao-cme-03-2021-propostas-plano-plurianual-2022-2025.pdf
+          path: previous/DOC-0138/conselho_de_escola_eixo_5_gestao-1.docx
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0114 raw
+      - name: Upload DOC-0139 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0114/04.-parecer-cme-004-2022-referente-1o-sem.pdf
+          path: previous/DOC-0139/decreto-260-apm.pdf
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0115 raw
+      - name: Upload DOC-0140 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0115/05.-parecer-cme-005-2022-construcao-de-creches.pdf
+          path: previous/DOC-0140/eixo_4_sociedade_civil_21_05_24.docx
           archive: false
           retention-days: 1
 
-      - name: Upload DOC-0116 raw
+      - name: Upload DOC-0141 raw
         uses: actions/upload-artifact@v7
         with:
-          path: previous/DOC-0116/05.-parecer-cme-03-2021-aprovacao-do-calendario-2022.pdf
+          path: previous/DOC-0141/6327.pdf
           archive: false
           retention-days: 1
 
