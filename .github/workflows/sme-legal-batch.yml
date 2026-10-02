@@ -50,7 +50,7 @@ jobs:
           echo "--- errors.tsv ---"
           cat out/errors.tsv
 
-      - name: Upload temporary artifact
+      - name: Upload temporary batch artifact
         id: upload
         uses: actions/upload-artifact@v4
         with:
@@ -58,6 +58,206 @@ jobs:
           path: out/
           if-no-files-found: error
           compression-level: 0
+          retention-days: 1
+
+      - name: Upload DOC-0142 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0142
+          path: out/DOC-0142/decreto_112_09_de_abril_2024.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0143 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0143
+          path: out/DOC-0143/deliberacao-educacao-especial.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0144 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0144
+          path: out/DOC-0144/htpc.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0145 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0145
+          path: out/DOC-0145/is-3-transferencia-do-servidor-na-mesma-secretaria.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0146 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0146
+          path: out/DOC-0146/lei-ordinaria-no-6976_2024-06-17t11_10_54-1.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0147 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0147
+          path: out/DOC-0147/pc_decreto-nc2ba-14-professor-coordenador-1.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0148 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0148
+          path: out/DOC-0148/pc_is-2-professor-coordenador-designacao-e-revogacao-.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0149 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0149
+          path: out/DOC-0149/pc_modelo-1doc-para-designacao-revogacao.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0150 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0150
+          path: out/DOC-0150/pc_resoluc3a7c3a3o-sme-02-pc-1.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0151 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0151
+          path: out/DOC-0151/pc_termo-de-opcao-2-cargos.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0152 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0152
+          path: out/DOC-0152/regimento_eleicao-coordenador.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0153 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0153
+          path: out/DOC-0153/vc_is-1-vice-diretor-designacao-e-revogacao-2-1.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0154 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0154
+          path: out/DOC-0154/vc_resolucao-vice-diretor.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0155 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0155
+          path: out/DOC-0155/vc_termo-de-opcao-2-cargos-1.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0156 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0156
+          path: out/DOC-0156/decreto-118-2024-educacao-integral-2024.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0157 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0157
+          path: out/DOC-0157/parecer-cme-002-2024-escola-em-tempo-integral.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0158 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0158
+          path: out/DOC-0158/parecer-cme-no-001-2024-orcamento-2023.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0159 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0159
+          path: out/DOC-0159/decreto_105.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0160 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0160
+          path: out/DOC-0160/decreto_187_23.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0161 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0161
+          path: out/DOC-0161/is_4_vale_alimentacao_set_2024.docx
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0162 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0162
+          path: out/DOC-0162/lei_925_vale_alimentacao.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0163 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0163
+          path: out/DOC-0163/decreto_269_inscricoes_atribuicao_de_aula.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0164 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0164
+          path: out/DOC-0164/portaria2419_24-comissao_bolsa_creche.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0165 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0165
+          path: out/DOC-0165/resolucao05-24_recesso_escolar.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0166 raw
+        uses: actions/upload-artifact@v7
+        with:
+          name: DOC-0166
+          path: out/DOC-0166/1.audiencia.publica.supervisao.nov_2024.pdf
+          archive: false
           retention-days: 1
 
       - name: Publish run metadata
