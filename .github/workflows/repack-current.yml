@@ -1,0 +1,200 @@
+name: SME Legal Raw Artifact Repack
+
+on:
+  push:
+    paths:
+      - 'requests/repack-current.txt'
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  repack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch existing batch artifact
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          curl -L --fail             -H "Authorization: Bearer $GH_TOKEN"             -H "X-GitHub-Api-Version: 2022-11-28"             "https://api.github.com/repos/${{ github.repository }}/actions/artifacts/11245303590/zip"             -o previous.zip
+          mkdir previous
+          unzip -q previous.zip -d previous
+
+      - name: Upload DOC-0004 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0004/DCN-Ensino-Fundamental-de-9-Anos-MEC.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0068 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0068/indicacao-conjunta-cme-sme-01-2021-versao-assinada-04-02-21.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0069 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0069/indicacao-e-deliberacao-cme-01-2020-covid-04-06-20.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0070 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0070/nota-de-repudio.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0071 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0071/nota-tecnica-cme-01-2021-assinada.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0072 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0072/parecer-cme-002-organizacao-do-calendario-escolar-2021.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0073 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0073/parecer-cme-01-2020-reorganizacao-calendario-2020.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0074 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0074/parecer-cme-01-2021-orcamentario.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0075 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0075/parecer-cme-03-2020-aplicacao-dos-recursos-proprios-na-educacao..pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0076 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0076/eixo_16_procedimentos_iniciais_26-01-2022-2.docx
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0077 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0077/protocolo-atualizacao.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0078 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0078/protocolo-sanitario-covd_2020.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0079 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0079/curriculo_completo-2019.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0080 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0080/conselho-de-escola_smelegal_29_02_2020.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0081 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0081/apresentacao_formacao_doc-vida-escolar.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0082 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0082/apresentacao-ppp-11-05-22.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0083 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0083/apresentacao-ppp-parte-2-25-05-22.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0084 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0084/classificacao-de-estudante.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0085 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0085/documentacao-escolar_12_04.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0086 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0086/formacao-conselho-de-ciclo.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0087 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0087/historico-escolar_2022_modelo.xls
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0088 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0088/historico-escolar_procedimentos_2022.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0089 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0089/pauta_formacao-gestores_20_09_22.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0090 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0090/reclassificacao-de-estudante.pdf
+          archive: false
+          retention-days: 1
+
+      - name: Upload DOC-0091 raw
+        uses: actions/upload-artifact@v7
+        with:
+          path: previous/DOC-0091/regularizacao-de-vida-escolar.pdf
+          archive: false
+          retention-days: 1
+
