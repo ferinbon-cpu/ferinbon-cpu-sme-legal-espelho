@@ -1,3 +1,4 @@
-source_artifact=11247487242
-range=DOC-0117..DOC-0141
+source_artifact=11248666961
+range=DOC-0142..DOC-0166
 count=25
+trigger=NEXT25-D
