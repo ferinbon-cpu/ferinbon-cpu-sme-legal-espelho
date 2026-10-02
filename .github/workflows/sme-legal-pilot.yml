@@ -1,9 +1,9 @@
-name: SME Legal Pilot Download
+name: SME Legal Batch Download
 
 on:
   push:
     paths:
-      - 'requests/pilot.txt'
+      - 'requests/batch.tsv'
   workflow_dispatch:
 
 permissions:
@@ -16,28 +16,31 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download original bytes
+      - name: Download original bytes and build manifest
         shell: bash
         run: |
           set -euo pipefail
-          IFS=$'\t' read -r DOC_ID URL FILENAME < requests/pilot.txt
-          test -n "$DOC_ID"
-          test -n "$URL"
-          test -n "$FILENAME"
-          mkdir -p out
-          curl --location --fail --retry 3 --retry-delay 2 --connect-timeout 30 --max-time 300 \
-            --output "out/$FILENAME" "$URL"
-          SIZE=$(stat -c %s "out/$FILENAME")
-          SHA256=$(sha256sum "out/$FILENAME" | awk '{print $1}')
-          MIME=$(file --brief --mime-type "out/$FILENAME")
-          printf 'doc_id=%s\nurl=%s\nfilename=%s\nsize_bytes=%s\nsha256=%s\nmime=%s\n' \
-            "$DOC_ID" "$URL" "$FILENAME" "$SIZE" "$SHA256" "$MIME" > out/metadata.txt
-          cat out/metadata.txt
+          mkdir -p out/files
+          printf 'doc_id\turl\tfilename\tsize_bytes\tsha256\tmime\n' > out/manifest.tsv
+          while IFS=$'\t' read -r DOC_ID URL FILENAME; do
+            [ -z "${DOC_ID:-}" ] && continue
+            test -n "$URL"
+            test -n "$FILENAME"
+            echo "Downloading $DOC_ID -> $FILENAME"
+            curl --location --fail --retry 3 --retry-delay 2 --connect-timeout 30 --max-time 600 \
+              --output "out/files/$FILENAME" "$URL"
+            SIZE=$(stat -c %s "out/files/$FILENAME")
+            SHA256=$(sha256sum "out/files/$FILENAME" | awk '{print $1}')
+            MIME=$(file --brief --mime-type "out/files/$FILENAME")
+            printf '%s\t%s\t%s\t%s\t%s\t%s\n' \
+              "$DOC_ID" "$URL" "$FILENAME" "$SIZE" "$SHA256" "$MIME" >> out/manifest.tsv
+          done < requests/batch.tsv
+          cat out/manifest.tsv
 
       - name: Upload temporary artifact
         uses: actions/upload-artifact@v4
         with:
-          name: sme-legal-pilot
+          name: sme-legal-batch
           path: out/
           if-no-files-found: error
           compression-level: 0
