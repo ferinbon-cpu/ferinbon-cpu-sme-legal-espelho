@@ -35,11 +35,19 @@ jobs:
             mkdir -p "out/$CASE_ID"
             TARGET="out/$CASE_ID/$FILENAME"
             echo "Downloading $CASE_ID ($DOC_ID) -> $FILENAME"
-            if curl --location --fail --retry 3 --retry-delay 2 --connect-timeout 30 --max-time 600                  --user-agent 'Mozilla/5.0 SME-Legal-Archive/1.0' --output "$TARGET" "$URL"; then
+            CURL_TLS=()
+            TRANSPORT_NOTE="TLS_VERIFIED"
+            if [[ "$URL" == https://serv90.limeira.sp.gov.br/* ]]; then
+              CURL_TLS=(--insecure)
+              TRANSPORT_NOTE="TLS_BYPASS_BROKEN_CHAIN"
+            fi
+            if curl "${CURL_TLS[@]}" --location --fail --retry 3 --retry-delay 2 --connect-timeout 30 --max-time 600 \
+                 --user-agent 'Mozilla/5.0 SME-Legal-Archive/1.0' --output "$TARGET" "$URL"; then
               SIZE=$(stat -c %s "$TARGET")
               SHA256=$(sha256sum "$TARGET" | awk '{print $1}')
               MIME=$(file --brief --mime-type "$TARGET")
-              printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n'                 "$CASE_ID" "$DOC_ID" "$URL" "$FILENAME" "$SOURCE_CLASS" "$SIZE" "$SHA256" "$MIME" >> out/metadata.tsv
+              printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
+                "$CASE_ID" "$DOC_ID" "$URL" "$FILENAME" "$SOURCE_CLASS" "$SIZE" "$SHA256" "$MIME" "$TRANSPORT_NOTE" >> out/metadata.tsv
             else
               rm -f "$TARGET"
               printf '%s\t%s\t%s\t%s\tDOWNLOAD_FAILED\n' "$CASE_ID" "$DOC_ID" "$URL" "$FILENAME" >> out/errors.tsv
