@@ -1,8 +1,11 @@
 case_id	doc_id	url	filename	source_class
-DOC-0001-ORIGINAL	DOC-0001	https://pne.mec.gov.br/images/pdf/pne_conhecendo_20_metas.pdf	pne_conhecendo_20_metas.pdf	ORIGINAL_URL
-DOC-0001-GOVBR	DOC-0001	https://www.gov.br/mec/pt-br/media/plano_carreira/pdf/pne_conhecendo_20_metas.pdf	pne_conhecendo_20_metas.pdf	OFFICIAL_MIRROR
-DOC-0005-ORIGINAL	DOC-0005	https://serv90.limeira.sp.gov.br/intranet/sites/default/files/IMCE/outros/instrucao_normativa_no_01.2017_-_manual_processos_iv_-_atualizada.pdf	instrucao_normativa_no_01.2017_-_manual_processos_iv_-_atualizada.pdf	ORIGINAL_URL
-DOC-0005-ALT-A	DOC-0005	https://serv90.limeira.sp.gov.br/intranet/sites/default/files/IMCE/manuais/manual-processos-iv.pdf	manual-processos-iv.pdf	OFFICIAL_CANDIDATE
-DOC-0005-ALT-B	DOC-0005	https://serv90.limeira.sp.gov.br/intranet/sites/default/files/IMCE/manuais/manual_processos_iv.pdf	manual_processos_iv.pdf	OFFICIAL_CANDIDATE
-DOC-0005-ALT-C	DOC-0005	https://serv90.limeira.sp.gov.br/intranet/sites/default/files/IMCE/manuais/manual_de_processos_iv.pdf	manual_de_processos_iv.pdf	OFFICIAL_CANDIDATE
-# retry legacy Limeira host with explicit TLS-chain bypass; provenance unchanged
+DOC-0002-ORIGINAL-HTTPS	DOC-0002	https://portal.mec.gov.br/cne/arquivos/pdf/PCB0498.pdf	PCB0498.pdf	ORIGINAL_URL
+DOC-0002-ORIGINAL-1998	DOC-0002	https://portal.mec.gov.br/cne/arquivos/pdf/1998/pceb004_98.pdf	pceb004_98.pdf	OFFICIAL_MEC_VARIANT
+DOC-0002-DOCMAN	DOC-0002	https://portal.mec.gov.br/index.php?option=com_docman&view=download&alias=852-parecer-ceb-04-98-pdf&category_slug=documentos-pdf&Itemid=30192	parecer-ceb-04-98.pdf	OFFICIAL_MEC_VARIANT
+DOC-0002-SME-LIMEIRA	DOC-0002	https://sme.limeira.sp.gov.br/leis/diretrizes_curriculares_nacionais_fundamental.pdf	diretrizes_curriculares_nacionais_fundamental.pdf	OFFICIAL_MIRROR
+DOC-0030-WP	DOC-0030	https://smelegal.wordpress.com/wp-content/uploads/2015/03/resoluc3a7c3a3o-sme-nc2ba-13_avaliac3a7c3a3o.pdf	resoluc3a7c3a3o-sme-nc2ba-13_avaliac3a7c3a3o.pdf	ORIGINAL_URL
+DOC-0030-WP-FILES	DOC-0030	https://smelegal.files.wordpress.com/2015/03/resoluc3a7c3a3o-sme-nc2ba-13_avaliac3a7c3a3o.pdf	resoluc3a7c3a3o-sme-nc2ba-13_avaliac3a7c3a3o.pdf	HISTORICAL_HOST
+DOC-0030-JOM3937-A	DOC-0030	https://www.limeira.sp.gov.br/jornal/3937.pdf	JOM_3937_2012.pdf	OFFICIAL_EQUIVALENCE_SOURCE
+DOC-0030-JOM3937-B	DOC-0030	https://servicosonline.limeira.sp.gov.br/jornal/3937.pdf	JOM_3937_2012.pdf	OFFICIAL_EQUIVALENCE_SOURCE
+META-SME-INDEX	META	https://sme.limeira.sp.gov.br/index_v2.php	index_v2.php.html	DISCOVERY
+META-WP-CDX	META	https://web.archive.org/cdx/search/cdx?url=smelegal.files.wordpress.com/2015/03/resoluc3a7c3a3o-sme-nc2ba-13_avaliac3a7c3a3o.pdf&output=json&filter=statuscode:200&collapse=digest	wayback_doc0030.json	DISCOVERY
