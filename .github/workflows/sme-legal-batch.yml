@@ -1,9 +1,9 @@
-name: SME Legal Batch Download
+name: SME Legal Canonical Batch Download
 
 on:
   push:
     paths:
-      - 'requests/batch*.tsv'
+      - 'requests/next.tsv'
   workflow_dispatch:
 
 permissions:
@@ -20,19 +20,24 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          test -f requests/next.tsv
           mkdir -p out
           : > out/metadata.tsv
           while IFS=$'\t' read -r DOC_ID URL FILENAME; do
             [ -z "${DOC_ID:-}" ] && continue
+            [ "$DOC_ID" = "doc_id" ] && continue
+            [[ "$DOC_ID" =~ ^# ]] && continue
+            test -n "$URL"
+            test -n "$FILENAME"
             mkdir -p "out/$DOC_ID"
             TARGET="out/$DOC_ID/$FILENAME"
-            curl --location --fail --retry 3 --retry-delay 2 --connect-timeout 30 --max-time 300 \
+            curl --location --fail --retry 3 --retry-delay 2 --connect-timeout 30 --max-time 600 \
               --output "$TARGET" "$URL"
             SIZE=$(stat -c %s "$TARGET")
             SHA256=$(sha256sum "$TARGET" | awk '{print $1}')
             MIME=$(file --brief --mime-type "$TARGET")
             printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$DOC_ID" "$URL" "$FILENAME" "$SIZE" "$SHA256" "$MIME" >> out/metadata.tsv
-          done < "$(ls requests/batch*.tsv | sort | tail -n1)"
+          done < requests/next.tsv
           cat out/metadata.tsv
 
       - name: Upload temporary artifact
