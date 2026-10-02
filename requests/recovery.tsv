@@ -1,11 +1,2 @@
 case_id	doc_id	url	filename	source_class
-DOC-0002-ORIGINAL-HTTPS	DOC-0002	https://portal.mec.gov.br/cne/arquivos/pdf/PCB0498.pdf	PCB0498.pdf	ORIGINAL_URL
-DOC-0002-ORIGINAL-1998	DOC-0002	https://portal.mec.gov.br/cne/arquivos/pdf/1998/pceb004_98.pdf	pceb004_98.pdf	OFFICIAL_MEC_VARIANT
-DOC-0002-DOCMAN	DOC-0002	https://portal.mec.gov.br/index.php?option=com_docman&view=download&alias=852-parecer-ceb-04-98-pdf&category_slug=documentos-pdf&Itemid=30192	parecer-ceb-04-98.pdf	OFFICIAL_MEC_VARIANT
-DOC-0002-SME-LIMEIRA	DOC-0002	https://sme.limeira.sp.gov.br/leis/diretrizes_curriculares_nacionais_fundamental.pdf	diretrizes_curriculares_nacionais_fundamental.pdf	OFFICIAL_MIRROR
-DOC-0030-WP	DOC-0030	https://smelegal.wordpress.com/wp-content/uploads/2015/03/resoluc3a7c3a3o-sme-nc2ba-13_avaliac3a7c3a3o.pdf	resoluc3a7c3a3o-sme-nc2ba-13_avaliac3a7c3a3o.pdf	ORIGINAL_URL
-DOC-0030-WP-FILES	DOC-0030	https://smelegal.files.wordpress.com/2015/03/resoluc3a7c3a3o-sme-nc2ba-13_avaliac3a7c3a3o.pdf	resoluc3a7c3a3o-sme-nc2ba-13_avaliac3a7c3a3o.pdf	HISTORICAL_HOST
-DOC-0030-JOM3937-A	DOC-0030	https://www.limeira.sp.gov.br/jornal/3937.pdf	JOM_3937_2012.pdf	OFFICIAL_EQUIVALENCE_SOURCE
-DOC-0030-JOM3937-B	DOC-0030	https://servicosonline.limeira.sp.gov.br/jornal/3937.pdf	JOM_3937_2012.pdf	OFFICIAL_EQUIVALENCE_SOURCE
-META-SME-INDEX	META	https://sme.limeira.sp.gov.br/index_v2.php	index_v2.php.html	DISCOVERY
-META-WP-CDX	META	https://web.archive.org/cdx/search/cdx?url=smelegal.files.wordpress.com/2015/03/resoluc3a7c3a3o-sme-nc2ba-13_avaliac3a7c3a3o.pdf&output=json&filter=statuscode:200&collapse=digest	wayback_doc0030.json	DISCOVERY
+DOC-0030-RESO2012-ZIP	DOC-0030	https://sme.limeira.sp.gov.br/leis/Reso_2012.zip	Reso_2012.zip	OFFICIAL_ARCHIVE
