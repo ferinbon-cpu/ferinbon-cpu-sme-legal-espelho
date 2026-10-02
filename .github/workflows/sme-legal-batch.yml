@@ -1,0 +1,45 @@
+name: SME Legal Batch Download
+
+on:
+  push:
+    paths:
+      - 'requests/batch*.tsv'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download original bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p out
+          : > out/metadata.tsv
+          while IFS=$'\t' read -r DOC_ID URL FILENAME; do
+            [ -z "${DOC_ID:-}" ] && continue
+            mkdir -p "out/$DOC_ID"
+            TARGET="out/$DOC_ID/$FILENAME"
+            curl --location --fail --retry 3 --retry-delay 2 --connect-timeout 30 --max-time 300 \
+              --output "$TARGET" "$URL"
+            SIZE=$(stat -c %s "$TARGET")
+            SHA256=$(sha256sum "$TARGET" | awk '{print $1}')
+            MIME=$(file --brief --mime-type "$TARGET")
+            printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$DOC_ID" "$URL" "$FILENAME" "$SIZE" "$SHA256" "$MIME" >> out/metadata.tsv
+          done < "$(ls requests/batch*.tsv | sort | tail -n1)"
+          cat out/metadata.tsv
+
+      - name: Upload temporary artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sme-legal-batch
+          path: out/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 1
