@@ -5,3 +5,4 @@ DOC-0005-ORIGINAL	DOC-0005	https://serv90.limeira.sp.gov.br/intranet/sites/defau
 DOC-0005-ALT-A	DOC-0005	https://serv90.limeira.sp.gov.br/intranet/sites/default/files/IMCE/manuais/manual-processos-iv.pdf	manual-processos-iv.pdf	OFFICIAL_CANDIDATE
 DOC-0005-ALT-B	DOC-0005	https://serv90.limeira.sp.gov.br/intranet/sites/default/files/IMCE/manuais/manual_processos_iv.pdf	manual_processos_iv.pdf	OFFICIAL_CANDIDATE
 DOC-0005-ALT-C	DOC-0005	https://serv90.limeira.sp.gov.br/intranet/sites/default/files/IMCE/manuais/manual_de_processos_iv.pdf	manual_de_processos_iv.pdf	OFFICIAL_CANDIDATE
+# retry legacy Limeira host with explicit TLS-chain bypass; provenance unchanged
