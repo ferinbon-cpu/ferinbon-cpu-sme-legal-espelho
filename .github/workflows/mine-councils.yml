@@ -1,0 +1,223 @@
+name: SME Legal Stage 05 Councils Mine
+
+on:
+  push:
+    paths:
+      - 'requests/councils-trigger.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  mine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install crawler dependencies
+        run: python -m pip install --disable-pip-version-check -q requests beautifulsoup4
+
+      - name: Crawl and download official council repositories
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf out
+          mkdir -p out/files reports
+          cat > /tmp/mine_councils.py <<'PY'
+          import csv, hashlib, json, mimetypes, os, re, subprocess, time
+          from pathlib import Path
+          from urllib.parse import urljoin, urlparse, parse_qs, unquote
+          import requests
+          from bs4 import BeautifulSoup, Tag
+
+          BASE = 'https://serv42.limeira.sp.gov.br'
+          COUNCILS = {
+              'CACS_FUNDEB': 33,
+              'CAE': 32,
+              'FME': 42,
+          }
+          OUT = Path('out')
+          FILES = OUT / 'files'
+          session = requests.Session()
+          session.headers.update({'User-Agent': 'Mozilla/5.0 SME-Legal-Archive/2.0 (+GitHub Actions)'})
+
+          def safe(s, maxlen=140):
+              s = unquote(str(s or '')).strip()
+              s = re.sub(r'[\\/:*?"<>|\x00-\x1f]+', '_', s)
+              s = re.sub(r'\s+', ' ', s).strip(' ._-')
+              if not s: s = 'documento'
+              return s[:maxlen]
+
+          def section_for(a):
+              node = a
+              while node:
+                  node = node.previous_element
+                  if isinstance(node, Tag) and node.name in ('h1','h2','h3','h4'):
+                      return node.get_text(' ', strip=True)
+              return 'SEM_SECAO'
+
+          def content_disposition_name(resp):
+              cd = resp.headers.get('content-disposition','')
+              m = re.search(r"filename\*=UTF-8''([^;]+)", cd, re.I)
+              if m: return unquote(m.group(1))
+              m = re.search(r'filename="?([^";]+)"?', cd, re.I)
+              return unquote(m.group(1)) if m else None
+
+          def magic_ext(path, mime):
+              sig = path.read_bytes()[:16]
+              if sig.startswith(b'%PDF'): return '.pdf'
+              if sig.startswith(b'PK\x03\x04'):
+                  try:
+                      import zipfile
+                      with zipfile.ZipFile(path) as z:
+                          names = set(z.namelist())
+                          if any(n.startswith('word/') for n in names): return '.docx'
+                          if any(n.startswith('xl/') for n in names): return '.xlsx'
+                          if any(n.startswith('ppt/') for n in names): return '.pptx'
+                  except Exception: pass
+                  return '.zip'
+              if sig.startswith(b'\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1'):
+                  return '.ole'
+              if sig.startswith(b'\x89PNG'): return '.png'
+              if sig[:3] == b'GIF': return '.gif'
+              if sig[:3] == b'\xff\xd8\xff': return '.jpg'
+              mt = (mime or '').split(';')[0].strip().lower()
+              return mimetypes.guess_extension(mt) or '.bin'
+
+          discovered=[]
+          seen_links=set()
+          for council, cid in COUNCILS.items():
+              list_url=f'{BASE}/netConselhos/listaDocumentos/?conselho={cid}'
+              r=session.get(list_url, timeout=60)
+              r.raise_for_status()
+              soup=BeautifulSoup(r.text,'html.parser')
+              for a in soup.find_all('a', href=True):
+                  href=urljoin(list_url,a['href'])
+                  if '/netConselhos/documento/' not in href: continue
+                  parsed=urlparse(href)
+                  q=parse_qs(parsed.query)
+                  docid=(q.get('documento') or [''])[0]
+                  desc=(q.get('desc') or [a.get_text(' ',strip=True) or ''])[0]
+                  key=(council,docid,href)
+                  if key in seen_links: continue
+                  seen_links.add(key)
+                  discovered.append({
+                      'council':council,'council_id':cid,'section':section_for(a),
+                      'document_id':docid,'description':desc,'source_page':list_url,
+                      'source_url':href
+                  })
+
+          with open(OUT/'discovered.tsv','w',newline='',encoding='utf-8') as f:
+              w=csv.DictWriter(f, fieldnames=discovered[0].keys(), delimiter='\t')
+              w.writeheader(); w.writerows(discovered)
+
+          metadata=[]; errors=[]
+          for i,item in enumerate(discovered,1):
+              council=item['council']; section=safe(item['section'],60); docid=item['document_id'] or f'noid-{i}'
+              target_dir=FILES/council/section
+              target_dir.mkdir(parents=True, exist_ok=True)
+              try:
+                  resp=session.get(item['source_url'], timeout=120, allow_redirects=True)
+                  resp.raise_for_status()
+                  raw=resp.content
+                  if not raw:
+                      raise RuntimeError('EMPTY_BODY')
+                  cdname=content_disposition_name(resp)
+                  finalbase=Path(urlparse(resp.url).path).name
+                  candidate=cdname or (finalbase if '.' in finalbase else None) or item['description'] or f'documento_{docid}'
+                  candidate=safe(candidate,150)
+                  tmp=target_dir/f'.tmp_{docid}'
+                  tmp.write_bytes(raw)
+                  mime=subprocess.check_output(['file','--brief','--mime-type',str(tmp)], text=True).strip()
+                  ext=Path(candidate).suffix.lower()
+                  if not ext or len(ext)>8:
+                      ext=magic_ext(tmp,mime)
+                      candidate=Path(candidate).stem+ext
+                  elif ext=='.ole':
+                      ext=magic_ext(tmp,mime); candidate=Path(candidate).stem+ext
+                  final=target_dir/f'{docid}__{candidate}'
+                  if final.exists():
+                      final=target_dir/f'{docid}__{hashlib.sha1(item["source_url"].encode()).hexdigest()[:8]}__{candidate}'
+                  tmp.rename(final)
+                  sha=hashlib.sha256(raw).hexdigest()
+                  metadata.append({**item,
+                      'final_url':resp.url,'http_status':resp.status_code,
+                      'relative_path':str(final.relative_to(OUT)), 'filename':final.name,
+                      'size':len(raw),'sha256':sha,'mime':mime,'status':'DOWNLOADED'})
+              except Exception as e:
+                  errors.append({**item,'error':type(e).__name__+': '+str(e)[:500]})
+              if i % 25 == 0:
+                  print(f'processed {i}/{len(discovered)} downloaded={len(metadata)} failed={len(errors)}', flush=True)
+              time.sleep(0.03)
+
+          fields=['council','council_id','section','document_id','description','source_page','source_url','final_url','http_status','relative_path','filename','size','sha256','mime','status']
+          with open(OUT/'metadata.tsv','w',newline='',encoding='utf-8') as f:
+              w=csv.DictWriter(f, fieldnames=fields, delimiter='\t', extrasaction='ignore'); w.writeheader(); w.writerows(metadata)
+          if errors:
+              with open(OUT/'errors.tsv','w',newline='',encoding='utf-8') as f:
+                  fields2=['council','council_id','section','document_id','description','source_page','source_url','error']
+                  w=csv.DictWriter(f, fieldnames=fields2, delimiter='\t', extrasaction='ignore'); w.writeheader(); w.writerows(errors)
+          else:
+              (OUT/'errors.tsv').write_text('council\tdocument_id\tsource_url\terror\n',encoding='utf-8')
+
+          bysha={}
+          for m in metadata: bysha.setdefault(m['sha256'],[]).append(m)
+          dups={k:v for k,v in bysha.items() if len(v)>1}
+          counts={}
+          for c in COUNCILS:
+              counts[c]={
+                  'discovered':sum(x['council']==c for x in discovered),
+                  'downloaded':sum(x['council']==c for x in metadata),
+                  'failed':sum(x['council']==c for x in errors),
+                  'unique_sha256':len({x['sha256'] for x in metadata if x['council']==c}),
+              }
+          summary={
+              'stage':'05_CONSELHOS','source':'netConselhos Limeira','counts':counts,
+              'total_discovered':len(discovered),'total_downloaded':len(metadata),
+              'total_failed':len(errors),'total_unique_sha256':len(bysha),
+              'duplicate_sha_groups':len(dups)
+          }
+          (OUT/'summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2),encoding='utf-8')
+          with open(OUT/'duplicates_by_sha.tsv','w',newline='',encoding='utf-8') as f:
+              w=csv.writer(f,delimiter='\t'); w.writerow(['sha256','count','councils','document_ids','paths'])
+              for sha,items in sorted(dups.items()):
+                  w.writerow([sha,len(items),';'.join(sorted({x['council'] for x in items})),';'.join(x['document_id'] for x in items),';'.join(x['relative_path'] for x in items)])
+          print(json.dumps(summary,ensure_ascii=False,indent=2))
+          PY
+          python /tmp/mine_councils.py
+          cp out/summary.json reports/councils-summary.json
+          cp out/metadata.tsv reports/councils-metadata.tsv
+          cp out/discovered.tsv reports/councils-discovered.tsv
+          cp out/errors.tsv reports/councils-errors.tsv
+          cp out/duplicates_by_sha.tsv reports/councils-duplicates-by-sha.tsv
+
+      - name: Upload Stage 05 artifact
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: sme-legal-stage05-conselhos
+          path: out/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Publish Stage 05 metadata to repository
+        if: always()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+          ARTIFACT_ID: ${{ steps.upload.outputs.artifact-id }}
+          COMMIT_SHA: ${{ github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'stage\t05_CONSELHOS\nrun_id\t%s\nrun_attempt\t%s\nartifact_id\t%s\ntrigger_commit_sha\t%s\n' \
+            "$RUN_ID" "$RUN_ATTEMPT" "${ARTIFACT_ID:-}" "$COMMIT_SHA" > latest-councils.tsv
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add latest-councils.tsv reports/councils-*.tsv reports/councils-summary.json
+          git commit -m "ci: publish SME Legal Stage 05 council mining metadata" || exit 0
+          git push
