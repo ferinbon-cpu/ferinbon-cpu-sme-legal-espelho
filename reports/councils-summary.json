@@ -1,0 +1,29 @@
+{
+  "stage": "05_CONSELHOS",
+  "source": "netConselhos Limeira",
+  "counts": {
+    "CACS_FUNDEB": {
+      "discovered": 305,
+      "downloaded": 305,
+      "failed": 0,
+      "unique_sha256": 303
+    },
+    "CAE": {
+      "discovered": 184,
+      "downloaded": 184,
+      "failed": 0,
+      "unique_sha256": 183
+    },
+    "FME": {
+      "discovered": 15,
+      "downloaded": 15,
+      "failed": 0,
+      "unique_sha256": 15
+    }
+  },
+  "total_discovered": 504,
+  "total_downloaded": 504,
+  "total_failed": 0,
+  "total_unique_sha256": 499,
+  "duplicate_sha_groups": 5
+}
