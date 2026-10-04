@@ -1,0 +1,314 @@
+name: SME Legal Stage 05 Councils Repack
+
+on:
+  push:
+    paths:
+      - 'requests/councils-repack-trigger.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  repack:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Stage 05 source artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: sme-legal-stage05-conselhos
+          path: input
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 37172287010
+
+      - name: Split into Drive-safe chunks
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import csv, shutil
+          from pathlib import Path
+          src=Path('input/files')
+          out=Path('chunks')
+          out.mkdir(exist_ok=True)
+          meta=list(csv.DictReader(open('input/metadata.tsv',encoding='utf-8'),delimiter='\t'))
+          bypath={Path(r['relative_path']).as_posix().removeprefix('files/'):r for r in meta}
+          for council in ['CACS_FUNDEB','CAE','FME']:
+              files=sorted((src/council).rglob('*.pdf'), key=lambda p:(int(p.name.split('__',1)[0]) if p.name.split('__',1)[0].isdigit() else 999999999, p.as_posix()))
+              for idx in range(0,len(files),20):
+                  n=idx//20
+                  d=out/f'{council}_{n:02d}'
+                  (d/'files').mkdir(parents=True,exist_ok=True)
+                  rows=[]
+                  for p in files[idx:idx+20]:
+                      rel=p.relative_to(src).as_posix()
+                      dest=d/'files'/p.name
+                      shutil.copy2(p,dest)
+                      r=bypath.get(rel)
+                      if r: rows.append(r)
+                  if rows:
+                      with open(d/'manifest.tsv','w',newline='',encoding='utf-8') as f:
+                          w=csv.DictWriter(f,fieldnames=rows[0].keys(),delimiter='\t');w.writeheader();w.writerows(rows)
+                  print(council,n,len(files[idx:idx+20]))
+          PY
+
+      - name: Upload CACS_FUNDEB chunk 00
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CACS_FUNDEB-chunk-00
+          path: chunks/CACS_FUNDEB_00/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CACS_FUNDEB chunk 01
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CACS_FUNDEB-chunk-01
+          path: chunks/CACS_FUNDEB_01/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CACS_FUNDEB chunk 02
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CACS_FUNDEB-chunk-02
+          path: chunks/CACS_FUNDEB_02/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CACS_FUNDEB chunk 03
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CACS_FUNDEB-chunk-03
+          path: chunks/CACS_FUNDEB_03/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CACS_FUNDEB chunk 04
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CACS_FUNDEB-chunk-04
+          path: chunks/CACS_FUNDEB_04/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CACS_FUNDEB chunk 05
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CACS_FUNDEB-chunk-05
+          path: chunks/CACS_FUNDEB_05/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CACS_FUNDEB chunk 06
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CACS_FUNDEB-chunk-06
+          path: chunks/CACS_FUNDEB_06/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CACS_FUNDEB chunk 07
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CACS_FUNDEB-chunk-07
+          path: chunks/CACS_FUNDEB_07/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CACS_FUNDEB chunk 08
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CACS_FUNDEB-chunk-08
+          path: chunks/CACS_FUNDEB_08/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CACS_FUNDEB chunk 09
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CACS_FUNDEB-chunk-09
+          path: chunks/CACS_FUNDEB_09/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CACS_FUNDEB chunk 10
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CACS_FUNDEB-chunk-10
+          path: chunks/CACS_FUNDEB_10/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CACS_FUNDEB chunk 11
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CACS_FUNDEB-chunk-11
+          path: chunks/CACS_FUNDEB_11/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CACS_FUNDEB chunk 12
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CACS_FUNDEB-chunk-12
+          path: chunks/CACS_FUNDEB_12/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CACS_FUNDEB chunk 13
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CACS_FUNDEB-chunk-13
+          path: chunks/CACS_FUNDEB_13/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CACS_FUNDEB chunk 14
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CACS_FUNDEB-chunk-14
+          path: chunks/CACS_FUNDEB_14/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CACS_FUNDEB chunk 15
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CACS_FUNDEB-chunk-15
+          path: chunks/CACS_FUNDEB_15/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CAE chunk 00
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CAE-chunk-00
+          path: chunks/CAE_00/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CAE chunk 01
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CAE-chunk-01
+          path: chunks/CAE_01/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CAE chunk 02
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CAE-chunk-02
+          path: chunks/CAE_02/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CAE chunk 03
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CAE-chunk-03
+          path: chunks/CAE_03/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CAE chunk 04
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CAE-chunk-04
+          path: chunks/CAE_04/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CAE chunk 05
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CAE-chunk-05
+          path: chunks/CAE_05/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CAE chunk 06
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CAE-chunk-06
+          path: chunks/CAE_06/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CAE chunk 07
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CAE-chunk-07
+          path: chunks/CAE_07/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CAE chunk 08
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CAE-chunk-08
+          path: chunks/CAE_08/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload CAE chunk 09
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-CAE-chunk-09
+          path: chunks/CAE_09/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Upload FME chunk 00
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage05-FME-chunk-00
+          path: chunks/FME_00/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 3
+
+      - name: Publish repack run metadata
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'stage\t05_CONSELHOS_REPACK\nrun_id\t%s\nsource_run_id\t37172287010\ncommit_sha\t%s\n' "${{ github.run_id }}" "${{ github.sha }}" > latest-councils-repack.tsv
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add latest-councils-repack.tsv
+          git commit -m "ci: publish SME Legal Stage 05 repack metadata" || exit 0
+          git push
