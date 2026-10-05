@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-05",
+  "expected": 504,
+  "drive_presence": 504,
+  "drive_size_exact": 502,
+  "drive_incremental_update": [
+    {"document_id":"1070","original_size":473211,"drive_size":498091,"extra_bytes":24880,"original_is_prefix":true},
+    {"document_id":"1071","original_size":693003,"drive_size":717883,"extra_bytes":24880,"original_is_prefix":true}
+  ],
+  "processing_statuses": {
+    "ANALISADO_EQUIVALENTE_HISTORICO": 2,
+    "ANALISADO_TEXTO": 260,
+    "ANALISADO_VISUAL": 22,
+    "INDEXADO_VISUAL": 218,
+    "ANALISADO_ANOMALIA_FONTE": 1,
+    "ANALISADO_DUPLICATA_EXATA": 1
+  },
+  "duplicate_groups": 5
+}
