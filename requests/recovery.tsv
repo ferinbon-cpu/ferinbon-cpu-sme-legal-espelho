@@ -1,4 +1,2 @@
 case_id	doc_id	url	filename	source_class
-UPDATE-2026-LC1027-LAW-PDF	UPDATE-2026-LC1027	https://legislacao.limeira.sp.leg.br/Limeira-SP/LeisComplementares/1027-2026/m3?Export=Pdf	lei_complementar_1027_2026.pdf	OFFICIAL_LEGISLATION
-UPDATE-2026-LC461-CONSOLIDATED	UPDATE-2026-LC461	https://legislacao.limeira.sp.leg.br/Limeira-SP/LeisComplementares/461-2009/m3?Export=Pdf	lei_complementar_461_2009_consolidada_2026.pdf	OFFICIAL_CONSOLIDATED
-UPDATE-2026-LC1027-AUTOGRAFO	UPDATE-2026-LC1027	https://consulta.limeira.sp.leg.br/arquivo?Id=592143	autografo_1030_plc_21_2026.pdf	OFFICIAL_CHAMBER
+LAC03-JOM7139	LAC-03	https://ecrie.com.br/Sistema/Conteudos/DiarioOficial/upload/u_137_15122025182852.pdf	jornal_oficial_limeira_ed_7139_2025-12-16.pdf	OFFICIAL_JOURNAL
